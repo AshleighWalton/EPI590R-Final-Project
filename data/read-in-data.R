@@ -1,7 +1,7 @@
-#read in data
+# read in data
 coffee_survey <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-05-14/coffee_survey.csv')
 
-#data cleaning (from githib)
+# data cleaning
 library(tidyverse)
 library(janitor)
 library(here)
@@ -64,6 +64,8 @@ coffee_survey <- coffee_survey_raw |>
 		number_children = number_of_children,
 		political_affiliation
 	)
+
+fs::dir_create(working_dir)
 
 readr::write_csv(
 	coffee_survey,
