@@ -2,6 +2,9 @@
 title: "Coffee Survey Final Project EPI590R"
 format: html
 editor: visual
+execute: 
+  echo: false
+theme: default
 ---
 
 ## Introduction to data
@@ -11,6 +14,8 @@ In October 2023, ["world champion barista" James Hoffmann](https://www.youtube.
 ## Read in the dataset 
 
 ```{r}
+#| message: false
+
 # read in data
 coffee_survey <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-05-14/coffee_survey.csv')
 
@@ -19,6 +24,8 @@ library(tidyverse)
 library(janitor)
 library(here)
 library(fs)
+library(gtsummary)
+library(dplyr)
 
 working_dir <- here::here("data", "2024", "2024-05-14")
 
@@ -86,19 +93,57 @@ readr::write_csv(
 )
 ```
 
-## Average spending on coffee (function)
+## What is the most common number of cups of coffee consumed? (function)
 
 ```{r}
-avg_spend <- function(x) {
-  n <- length(x)
-  mean_val <- sum(x, na.rm = TRUE) / n
-  return(mean_val)
+most_common <- function(x) {
+  tab <- table(x)
+  mode_val <- names(tab)[which.max(tab)]
+  return(mode_val)
 }
+
+most_common(coffee_survey$cups)
 ```
+
+Most participants of the Coffee_Survey report drinking 2 cups of coffee a day. This is called the mode.
 
 ## Table 1 (a {gtsummary} table of descriptive statistics)
 
 ```{r}
+#| message: false
+#| warning: false
+
+coffee_table <- tbl_summary(
+  coffee_survey,
+  by = gender,
+  include = c(
+    education_level,
+    ethnicity_race,
+    employment_status,
+    age,
+    cups,
+    total_spend
+  ),
+  label = list(
+    education_level ~ "Education",
+    ethnicity_race ~ "Race/ethnicity",
+    employment_status ~ "Employment",
+    age ~ "Age",
+    cups ~ "Cups per day",
+    total_spend ~ "Monthly spend ($)"
+  ),
+  missing_text = "Missing"
+) |> 
+  add_p(test = list(
+    all_continuous() ~ "t.test", 
+    all_categorical() ~ "chisq.test"
+  )) |> 
+  add_overall(col_label = "**Total**") |> 
+  bold_labels() |> 
+  modify_footnote(update = everything() ~ NA) |> 
+  modify_header(label = "**Variable**", p.value = "**P**")
+
+coffee_table
 
 ```
 
