@@ -113,6 +113,9 @@ Most participants of the Coffee_Survey report drinking 2 cups of coffee a day. T
 #| message: false
 #| warning: false
 
+#| label: tbl-1
+#| tbl-cap: "Descriptive Statistics"
+
 coffee_table <- tbl_summary(
   coffee_survey,
   by = gender,
@@ -155,4 +158,10 @@ coffee_table
 ## Figure 1 
 
 ```{r}
+barplot(table(coffee_survey$where_drink),
+        main = "Figure 1: Where People Typically Drink Coffee",
+        xlab = "Location",
+        ylab = "Number of Respondents",
+        col = "white")
+
 ```
