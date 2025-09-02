@@ -114,7 +114,7 @@ Most participants report drinking `r modal_cups` cups of coffee a day. This is c
 #| message: false
 #| warning: false
 
-#| label: tbl-1
+#| label: tbl-one
 #| tbl-cap: "Descriptive Statistics"
 
 coffee_table <- tbl_summary(
@@ -151,12 +151,32 @@ coffee_table
 
 ```
 
-There were `r nrow(coffee_survey)` participants. Among male participants, `r inline_text(coffee_table, variable = "employment_status", level = "Full-time", column = "stat_1")` were employed full-time.
+There were `r nrow(coffee_survey)` participants. Among male participants, `r inline_text(coffee_table, variable = "employment_status", level = "Employed full-time", column = "stat_1")` were employed full-time.
 
 ## Table 2 (Fit a regression and present well-formatted results from the regression)
 
 ```{r}
+coffee_survey <- coffee_survey |> 
+  mutate(high_spender = ifelse(total_spend %in% 
+                                 c("$60-$80", "$80-$100", ">$100"), 1, 0))
+
+logistic_model <- glm(high_spender ~ cups + age + gender, 
+                      data = coffee_survey, 
+                      family = binomial())
+
+tbl_regression(
+  logistic_model, 
+  exponentiate = TRUE,
+  label = list(
+    cups ~ "Cups per day",
+    age ~ "Age (years)",
+    gender ~ "Gender"
+  )
+) |> 
+  bold_labels()
 ```
+
+Compared to participants who reported drinking 1 cup per day, those who drank 2 cups had more than twice the odds of being a high spender (OR = 2.26, 95% CI: 1.82–2.80, *p* \< 0.001).
 
 ## Figure 1
 
@@ -169,3 +189,5 @@ barplot(table(coffee_survey$where_drink),
         col = "white")
 
 ```
+
+Most people report drinking coffee at home.
