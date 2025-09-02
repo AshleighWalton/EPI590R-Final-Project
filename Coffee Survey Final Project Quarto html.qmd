@@ -4,14 +4,14 @@ format: html
 editor: visual
 execute: 
   echo: false
-theme: default
+theme: minty
 ---
 
 ## Introduction to data
 
 In October 2023, ["world champion barista" James Hoffmann](https://www.youtube.com/watch?v=bMOOQfeloH0) and [coffee company Cometeer](https://cometeer.com/pages/the-great-american-coffee-taste-test) held the "Great American Coffee Taste Test" on YouTube, during which viewers were asked to fill out a survey about 4 coffees they ordered from Cometeer for the tasting. [Data blogger Robert McKeon Aloe analyzed the data the following month](https://rmckeon.medium.com/great-american-coffee-taste-test-breakdown-7f3fdcc3c41d). This data set can be found under the 2024 folder in TidyTuesday.
 
-## Read in the dataset 
+## Read in the dataset
 
 ```{r}
 #| message: false
@@ -102,10 +102,10 @@ most_common <- function(x) {
   return(mode_val)
 }
 
-most_common(coffee_survey$cups)
+modal_cups <- most_common(coffee_survey$cups)
 ```
 
-Most participants of the Coffee_Survey report drinking 2 cups of coffee a day. This is called the mode.
+Most participants report drinking `r modal_cups` cups of coffee a day. This is called the mode.
 
 ## Table 1 (a {gtsummary} table of descriptive statistics)
 
@@ -150,14 +150,17 @@ coffee_table
 
 ```
 
+There were `r nrow(coffee_survey)` participants. Among male participants, the median (IQR) age was `r inline_text(coffee_table, variable = "age", column = "stat_1")`years.
+
 ## Table 2 (Fit a regression and present well-formatted results from the regression)
 
 ```{r}
 ```
 
-## Figure 1 
+## Figure 1
 
 ```{r}
+
 barplot(table(coffee_survey$where_drink),
         main = "Figure 1: Where People Typically Drink Coffee",
         xlab = "Location",
