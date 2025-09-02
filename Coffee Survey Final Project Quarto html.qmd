@@ -103,6 +103,7 @@ most_common <- function(x) {
 }
 
 modal_cups <- most_common(coffee_survey$cups)
+
 ```
 
 Most participants report drinking `r modal_cups` cups of coffee a day. This is called the mode.
@@ -150,7 +151,7 @@ coffee_table
 
 ```
 
-There were `r nrow(coffee_survey)` participants. Among male participants, the median (IQR) age was `r inline_text(coffee_table, variable = "age", column = "stat_1")`years.
+There were `r nrow(coffee_survey)` participants. Among male participants, `r inline_text(coffee_table, variable = "employment_status", level = "Full-time", column = "stat_1")` were employed full-time.
 
 ## Table 2 (Fit a regression and present well-formatted results from the regression)
 
